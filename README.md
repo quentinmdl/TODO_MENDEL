@@ -68,4 +68,4 @@ Un blog très pertinent  : http://laravel.sillo.org/
 
 ## Le mcd de l'application
 
-[mcd]: https://github.com/NF-yac/todo-b2-20-21/master/database/mcd/todo.svg "MCD de l'application"
+[mcd]: https://raw.githubusercontent.com/NF-yac/todo-b2-20-21/master/database/mcd/todo.svg "MCD de l'application"
