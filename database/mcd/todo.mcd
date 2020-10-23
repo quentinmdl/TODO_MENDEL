@@ -1,0 +1,14 @@
+MAKE_ATTACHMENT, 0N USER, 01 ATTACHMENT
+USER: id, name, email, email_verified_at, password, remember_token, created_at, updated_at
+MAKE_COMMENT, 0N USER, 01 COMMENT
+COMMENT: id, text, created_at, updated_at
+
+ATTACHMENT: id, file, filename, size, type, created_at, updated_at
+OWNER, 01 TASK, 0N USER
+TASK_USER, 0N USER, 0N TASK: assigned
+HAS_COMMENT, 0N TASK, 11 COMMENT
+
+HAS_ATTACHMENT, 0N TASK, 11 ATTACHMENT
+TASK: id, title, description, due_date, state, created_at, updated_at
+HAS, 01 TASK, 0N CATEGORY
+CATEGORY: id, name, created_at, updated_at
