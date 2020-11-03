@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit\Database;
 
 use Tests\TestCase;
 use Illuminate\Support\Facades\Schema;
@@ -21,7 +21,7 @@ class TaskUserTest extends TestCase
         $this->assertTrue(
             Schema::hasColumns('task_user', 
                 [
-                    "id", "user_id", "task_id", "assigned", 
+                    "id", "user_id", "task_id", /*"assigned", */
                     "created_at", "updated_at"
                 ]
             ), 1
@@ -61,7 +61,7 @@ class TaskUserTest extends TestCase
     {
         $this->expectException("Illuminate\Database\QueryException");
         $this->expectExceptionCode(23000);
-        TaskUser::factory()->create(['user_id' =>1000]);
+        TaskUser::factory()->create(['user_id' =>0]);
     }
     
     /**
@@ -73,7 +73,7 @@ class TaskUserTest extends TestCase
     {
         $this->expectException("Illuminate\Database\QueryException");
         $this->expectExceptionCode(23000);
-        TaskUser::factory()->create(['task_id' =>1000]);
+        TaskUser::factory()->create(['task_id' =>0]);
     }
 
     /**
@@ -91,47 +91,5 @@ class TaskUserTest extends TestCase
         $taskUser = TaskUser::factory()->create(['task_id' => $task->id, 'user_id' => $user->id]);
         $taskUser2 = TaskUser::factory()->create(['task_id' => $task->id, 'user_id' => $user->id]);
     }
-
-    //---------------- Relationship Testing -----------------------//
-
-    /**
-     * Teste la relation entre le modèle Comment et le modèle User
-     *
-     * @return void
-     */
-    public function testTaskUserBelongsToAnUser()
-    {
-        $user    = User::factory()->create(); 
-        $task_user    = TaskUser::factory()->create(['user_id' => $user->id]);
-        
-   
-        // Méthode 1 : l'uitlisateur associé à la pièce jointe est un bien une instance de la classe User
-        $this->assertInstanceOf(User::class, $task_user->user);
-        
-        // Méthode 2: Le nombre d'utilisateur auquels est associée la pièce jointe est bien égal à 1
-        $this->assertEquals(1, $task_user->user()->count());
-
-    }
-
-
-    /**
-     * Teste la relation entre le modèle Comment et le modèle Task
-     *
-     * @return void
-     */
-    public function testTaskUserBelongsToATask()
-    {
-        $task    = Task::factory()->create(); 
-        $task_user    = TaskUser::factory()->create(['task_id' => $task->id]);
-        
-   
-        // Méthode 1 : la tâche associée à la pièce jointe est un bien une instance de la classe Task
-        $this->assertInstanceOf(Task::class, $task_user->task);
-        
-        // Méthode 2: Le nombre de tâche auquelles est associée la pièce jointe est bien égal à 1
-        $this->assertEquals(1, $task_user->task()->count());
-
-    }
-
 
 }

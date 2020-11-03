@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit\Database;
 
 use Tests\TestCase;
 use Illuminate\Support\Facades\Schema;
-use App\Models\{Attachment, User, Task};
+use App\Models\{Attachment};
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AttachmentTest extends TestCase
@@ -38,7 +38,7 @@ class AttachmentTest extends TestCase
     {
         $this->expectException("Illuminate\Database\QueryException");
         $this->expectExceptionCode(23000);
-        Attachment::factory()->create(['user_id' =>1000]);
+        Attachment::factory()->create(['user_id' => 0]);
     }
 
     /**
@@ -50,7 +50,7 @@ class AttachmentTest extends TestCase
     {
         $this->expectException("Illuminate\Database\QueryException");
         $this->expectExceptionCode(23000);
-        Attachment::factory()->create(['task_id' =>1000]);
+        Attachment::factory()->create(['task_id' => 0]);
     }
 
     /**
@@ -74,51 +74,5 @@ class AttachmentTest extends TestCase
         $attachment->delete();
         $this->assertDeleted($attachment);
     }
-
-
-    /**
-     * Teste la relation entre le modèle Attachment et le modèle Task
-     *
-     * @return void
-     */
-    public function testAttachmentBelongsToATask()
-    {
-        $task    = Task::factory()->create(); 
-        $attachment    = Attachment::factory()->create(['task_id' => $task->id]);
-        
-   
-        // Méthode 1 : la tâche associée à la pièce jointe est un bien une instance de la classe Task
-        $this->assertInstanceOf(Task::class, $attachment->task);
-        
-        // Méthode 2: Le nombre de tâche auquelles est associée la pièce jointe est bien égal à 1
-        $this->assertEquals(1, $attachment->task()->count());
-
-    }
-
-
-    /**
-     * Teste la relation entre le modèle Attachment et le modèle User
-     *
-     * @return void
-     */
-    public function testAttachmentBelongsToAnUser()
-    {
-        $user    = User::factory()->create(); 
-        $attachment    = Attachment::factory()->create(['user_id' => $user->id]);
-        
-   
-        // Méthode 1 : l'utilisateur associé à la pièce jointe est un bien une instance de la classe User
-        $this->assertInstanceOf(User::class, $attachment->user);
-        
-        // Méthode 2: Le nombre d'utilisateur auquels est associée la pièce jointe est bien égal à 1
-        $this->assertEquals(1, $attachment->user()->count());
-
-    }
-
-
-    
-
-
-
 
 }

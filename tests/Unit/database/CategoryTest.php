@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit\Database;
 
 use Tests\TestCase;
 use Illuminate\Support\Facades\Schema;
@@ -49,21 +49,5 @@ class CategoryTest extends TestCase
         $this->assertDeleted($categorie);
     }
 
-
-    //---------------- Relationship Testing -----------------------//
-
-    /**
-     * Teste la relation entre le modèle Category et le modèle Task 
-     *
-     * @return void
-     */
-    public function testCategoryHasManyTask() 
-    {
-        $nb = 3; 
-        $category = Category::factory()->hasTasks($nb)->create();
-        $this->assertEquals($category->tasks->count(), $nb);
-        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $category->tasks);
-    }
-    
 
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit\Database;
 
 use Tests\TestCase;
 use Illuminate\Support\Facades\Schema;
-use App\Models\{User, Task, Comment};
+use App\Models\{Comment};
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CommentTest extends TestCase
@@ -34,7 +34,7 @@ class CommentTest extends TestCase
     {
         $this->expectException("Illuminate\Database\QueryException");
         $this->expectExceptionCode(23000);
-        Comment::factory()->create(['user_id' =>1000]);
+        Comment::factory()->create(['user_id' =>0]);
     }
 
     /**
@@ -46,7 +46,7 @@ class CommentTest extends TestCase
     {
         $this->expectException("Illuminate\Database\QueryException");
         $this->expectExceptionCode(23000);
-        Comment::factory()->create(['task_id' =>1000]);
+        Comment::factory()->create(['task_id' =>0]);
     }
 
     /**
@@ -70,50 +70,6 @@ class CommentTest extends TestCase
         $comment->delete();
         $this->assertDeleted($comment);
     }
-
-
-
-    //---------------- Relationship Testing -----------------------//
-
-    /**
-     * Teste la relation entre le modèle Comment et le modèle User
-     *
-     * @return void
-     */
-    public function testCommentBelongsToAnUser()
-    {
-        $user    = User::factory()->create(); 
-        $comment    = Comment::factory()->create(['user_id' => $user->id]);
-        
-   
-        // Méthode 1 : l'uitlisateur associé à la pièce jointe est un bien une instance de la classe User
-        $this->assertInstanceOf(User::class, $comment->user);
-        
-        // Méthode 2: Le nombre d'utilisateur auquels est associée la pièce jointe est bien égal à 1
-        $this->assertEquals(1, $comment->user()->count());
-
-    }
-
-
-    /**
-     * Teste la relation entre le modèle Comment et le modèle Task
-     *
-     * @return void
-     */
-    public function testCommentBelongsToATask()
-    {
-        $task    = Task::factory()->create(); 
-        $comment    = Comment::factory()->create(['task_id' => $task->id]);
-        
-   
-        // Méthode 1 : la tâche associée à la pièce jointe est un bien une instance de la classe Task
-        $this->assertInstanceOf(Task::class, $comment->task);
-        
-        // Méthode 2: Le nombre de tâche auquelles est associée la pièce jointe est bien égal à 1
-        $this->assertEquals(1, $comment->task()->count());
-
-    }
-
 
 
 }
