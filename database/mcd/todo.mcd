@@ -6,12 +6,12 @@ COMMENT: id, text, created_at, updated_at
 
 ATTACHMENT: id, file, filename, size, type, created_at, updated_at
 OWNER,0N USER, 01 BOARD
-BOARD: id, title
-BOARD_USER, 0N USER, 0N BOARD:
+BOARD: id, title, description, created_at, updated_at
+BOARD_USER, 0N USER, 0N BOARD
 TASK_USER, 0N USER, 0N TASK
 HAS_COMMENT, 0N TASK, 11 COMMENT
 
-BOARD_TASK, 11 TASK, 0N BOARD:
+BOARD_TASK, 11 TASK, 0N BOARD
 
 HAS_ATTACHMENT, 0N TASK, 11 ATTACHMENT
 TASK: id, title, description, due_date, state, created_at, updated_at

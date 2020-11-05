@@ -5,7 +5,7 @@ namespace Tests\Unit\Database;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
-use App\Models\{User, Comment, Attachment, Task, TaskUser};
+use App\Models\{User, Comment, Attachment, TaskUser, Board, BoardUser};
 
 class UserTest extends TestCase
 {
@@ -49,9 +49,10 @@ class UserTest extends TestCase
     public function testUserIsDeletedFromDatabase() {
 
         $user = User::factory()->create(); 
-        Task::factory()->create(["user_id" => $user->id]);
+        Board::factory()->create(["user_id" => $user->id]);
         Attachment::factory()->create(["user_id" => $user->id]);
         Comment::factory()->create(["user_id" => $user->id]);
+        BoardUser::factory()->create(["user_id" => $user->id]);
         TaskUser::factory()->create(["user_id" => $user->id]);
 
         $user->delete(); 
