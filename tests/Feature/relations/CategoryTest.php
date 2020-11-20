@@ -25,6 +25,9 @@ class CategoryTest extends TestCase
         $category = Category::factory()->hasTasks($nb)->create();
         $this->assertEquals($category->tasks->count(), $nb);
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $category->tasks);
+
+        //Aide : 
+        $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\hasMany', $category->tasks());
     }
     
 

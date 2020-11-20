@@ -3,9 +3,9 @@
 namespace Tests\Unit\Database;
 
 use Tests\TestCase;
-use App\Models\{User, Task, TaskUser};
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\{User, Task, TaskUser};
 
 class TaskUserTest extends TestCase
 {

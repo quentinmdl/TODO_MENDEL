@@ -29,6 +29,9 @@ class TaskUserTest extends TestCase
         // Méthode 2: Le nombre d'utilisateur auquels est associée le modèle est bien égal à 1
         $this->assertEquals(1, $task_user->user()->count());
 
+        //Aide : 
+        $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\BelongsTo', $task_user->user());
+
     }
 
 
@@ -48,6 +51,9 @@ class TaskUserTest extends TestCase
         
         // Méthode 2: Le nombre de tâches auquelles est associé le modèle est bien égal à 1
         $this->assertEquals(1, $task_user->task()->count());
+
+        //Aide : 
+        $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\BelongsTo', $task_user->task());
 
     }
 

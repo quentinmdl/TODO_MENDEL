@@ -4,6 +4,7 @@ namespace Tests\Feature\Relations;
 
 use Tests\TestCase;
 use App\Models\{User, Task, Comment};
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CommentTest extends TestCase
@@ -35,6 +36,9 @@ class CommentTest extends TestCase
         // Méthode 2: Le nombre d'utilisateur auquels est associé le commentaire est bien égal à 1
         $this->assertEquals(1, $comment->user()->count());
 
+        //Aide : 
+        $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\BelongsTo', $comment->user());
+
     }
 
 
@@ -54,6 +58,9 @@ class CommentTest extends TestCase
         
         // Méthode 2: Le nombre de tâche auquelles est associé le commentaire est bien égal à 1
         $this->assertEquals(1, $comment->task()->count());
+
+        //Aide : 
+        $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\BelongsTo', $comment->task());
 
     }
 

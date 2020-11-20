@@ -29,6 +29,9 @@ class AttachmentTest extends TestCase
         // Méthode 2: Le nombre de tâche auquelles est associée la pièce jointe est bien égal à 1
         $this->assertEquals(1, $attachment->task()->count());
 
+        //Aide : 
+        $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\BelongsTo', $attachment->task());
+
     }
 
 
@@ -48,6 +51,9 @@ class AttachmentTest extends TestCase
         
         // Méthode 2: Le nombre d'utilisateur auquels est associée la pièce jointe est bien égal à 1
         $this->assertEquals(1, $attachment->user()->count());
+
+        //Aide : 
+        $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\BelongsTo', $attachment->user());
 
     }
 

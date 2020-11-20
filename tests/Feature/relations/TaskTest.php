@@ -28,6 +28,10 @@ class TaskTest extends TestCase
         // Méthode 2: Le nombre de propiétaires de la tâche est bien égal à 1
         $this->assertEquals(1, $task->board()->count());
 
+        //Aide : 
+        $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\BelongsTo', $task->board());
+
+
     }
 
     /**
@@ -45,6 +49,9 @@ class TaskTest extends TestCase
         
         // Méthode 2: Le nombre de catégorie de la tâche est bien égal à 1
         $this->assertEquals(1, $task->category()->count());
+
+        //Aide : 
+        $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\BelongsTo', $task->category());
 
     }
 
@@ -86,6 +93,7 @@ class TaskTest extends TestCase
         // Test 1 : Le nombre d'utilisateur de la tâche est bien égal à $nb (le jeu de données fourni dans la fonction).
         $this->assertEquals($nb+1, $task->participants->count());
 
+
     }
 
     /**
@@ -105,6 +113,9 @@ class TaskTest extends TestCase
 
         // Test 2: Les utilisateurs assignés sont bien liés à la tâche et sont bien une collection.
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $task->assignedUsers);
+
+        //Aide : 
+        $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\BelongsToMany', $task->assignedUsers());
     }
 
 

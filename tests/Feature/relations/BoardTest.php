@@ -27,6 +27,9 @@ class BoardTest extends TestCase
         
         // Méthode 2: Le nombre de propiétaires de la board est bien égal à 1
         $this->assertEquals(1, $board->owner()->count());
+
+        //Aide : 
+        $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\BelongsTo', $board->owner());
     }
 
 
@@ -48,6 +51,9 @@ class BoardTest extends TestCase
 
         // Test 2: Les utilisateurs sont bien liés à la board et sont bien une collection.
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $board->users);
+
+        //Aide : 
+        $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\BelongsToMany', $board->users());
     }
 
 
@@ -68,6 +74,9 @@ class BoardTest extends TestCase
 
         // Test 2: Les tâches sont bien liés à la board et sont bien une collection.
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $board->tasks);
+
+        //Aide : 
+        $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\HasMany', $board->tasks());
     }
     
     /**

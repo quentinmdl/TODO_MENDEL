@@ -29,6 +29,9 @@ class BoardUserTest extends TestCase
         // Méthode 2: Le nombre d'utilisateur auquels est associé le modèle est bien égal à 1
         $this->assertEquals(1, $board_user->user()->count());
 
+        //Aide : 
+        $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\BelongsTo', $board_user->user());
+
     }
 
 
@@ -49,7 +52,9 @@ class BoardUserTest extends TestCase
         
          // Méthode 2: Le nombre de boards auquels est associée le modèle est bien égal à 1
         $this->assertEquals(1, $board_user->board()->count());
-
+        
+        //Aide : 
+        $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\BelongsTo', $board_user->board());
     }
 
     /**
@@ -60,7 +65,7 @@ class BoardUserTest extends TestCase
     public function testBoardUserHasManyTasks()
     {
         $nb = 3; 
-        $board    = Board::factory()->hasTasks(3)->create(); 
+        $board    = Board::factory()->hasTasks($nb)->create(); 
         $board_user    = BoardUser::factory()->create(['board_id' => $board->id]);
         
         // Test 1 : Le nombre de tâche liées au modèle est bien égal à $nb (le jeu de données fourni dans la fonction).
@@ -69,6 +74,8 @@ class BoardUserTest extends TestCase
         // Test 2: Les tâches sont bien liés au modèle et sont bien une collection.
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $board_user->tasks);
 
+        //Aide : 
+        $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\hasManyThrough', $board_user->tasks());
     }
 
 }
