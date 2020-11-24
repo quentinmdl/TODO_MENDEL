@@ -3,7 +3,7 @@
 namespace Tests\Feature\Relations;
 
 use Tests\TestCase;
-use App\Models\{Category, User, Task, Comment, Attachment, Board, BoardUser};
+use App\Models\{Category, User, Task, Comment, Attachment, Board, BoardUser, TaskUser};
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TaskTest extends TestCase
@@ -104,10 +104,15 @@ class TaskTest extends TestCase
     public function testTaskHasManyAssignedUsers()
     {
         $nb         = 3; 
-        $task       = Task::factory()
-                        ->hasAssignedUsers($nb)
-                        ->create();
-        
+
+        $user = User::factory()->create(); 
+        $board = Board::factory()->hasUsers($nb-1)->create(['user_id' => $user->id]);
+        $task = Task::factory()->create(['board_id' => $board->id]);
+
+        foreach($board->users as $user) {
+            TaskUser::factory()->create(['user_id' => $user->id, 'task_id' => $task->id]);
+        }
+
         // test 1: Le nombre d'utilisateurs assignés à la tâche est bien égal à $nb (le jeu de données fourni dans la fonction).
         $this->assertEquals($nb, $task->assignedUsers->count());
 
@@ -171,9 +176,10 @@ class TaskTest extends TestCase
      * @return void
      */
     public function testTaskHasPivotClassForAssignedUsers() {
-        $task       = Task::factory()
-                        ->hasAssignedUsers(1)
-                        ->create();
+        $user = User::factory()->create(); 
+        $board = Board::factory()->create(['user_id' => $user->id]);
+        $task = Task::factory()->create(['board_id' => $board->id]);
+        TaskUser::factory()->create(['user_id' => $user->id, 'task_id' => $task->id]);
         $this->assertInstanceOf('App\Models\TaskUser', $task->assignedUsers()->first()->pivot);
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Relations\Pivot', $task->assignedUsers()->first()->pivot);
     }

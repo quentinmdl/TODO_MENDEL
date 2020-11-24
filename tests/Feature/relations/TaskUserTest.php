@@ -64,16 +64,16 @@ class TaskUserTest extends TestCase
      * @return void
      */
     public function testUserCannotBeAssignedToATaskIfHeIsNotInTheBoardTheTaskBelongsTo() {
-        // $user = User::factory()->create(); 
-        // $task = Task::factory()->create();
+        $user = User::factory()->create(); 
+        $board = Board::factory()->create();
+        $task = Task::factory()->create(['board_id' => $board->id]);
 
-        // //$task_user = TaskUser::factory()->create(['task_id' => $task->id, 'user_id', $user->id]); 
-        // $task_user = new TaskUser(); 
-        // $task_user->user_id =  $user->id; 
-        // $task_user->task_id = $task->id; 
-        // $task_user->save(); 
+        $task_user = new TaskUser(); 
+        $task_user->user_id =  $user->id; 
+        $task_user->task_id = $task->id; 
+        $task_user->save(); 
 
-        // $this->assertDatabaseMissing('task_user', ['task_id' => $task->id, "user_id", $user->id]);
+        $this->assertDatabaseMissing('task_user', $task_user->attributesToArray());
 
     }
 

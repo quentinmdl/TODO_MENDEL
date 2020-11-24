@@ -27,6 +27,24 @@ class TaskUser extends Pivot
     public $incrementing = true;
 
     /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted() {
+
+        /**
+         * 
+         * @return boolean true if user is in the same board the task belongs to. 
+         */
+        // Si on renvoi faux dans cette fonction, la création n'est pas effectuée, sinon elle est effectuée
+        static::creating(function ($task_user) {
+            return !is_null($task_user->task->board->users->find($task_user->user_id));
+        });
+    }
+
+
+    /**
      * Renvoi l'utilisateur lié à la tâche
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

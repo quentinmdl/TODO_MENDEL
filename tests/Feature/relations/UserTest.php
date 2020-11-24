@@ -4,7 +4,7 @@ namespace Tests\Feature\Relations;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\{User, Comment, Attachment, Task};
+use App\Models\{User, Comment, Attachment, Task, TaskUser, Board};
 
 class UserTest extends TestCase
 {
@@ -25,7 +25,7 @@ class UserTest extends TestCase
         $nb = 3; 
         $user = User::factory()->hasOwnedBoards($nb)->create();
         $this->assertEquals($user->ownedBoards->count(), $nb);
-        //On verifie que la relation d'appartenance n'utilise pas le pivot
+        //On vérifie que la relation d'appartenance n'utilise pas le pivot
         $this->assertNull($user->ownedBoards->first()->pivot);
         //pour aide : les modèles sont liés par la bonne relation eloquent.
         $this->assertInstanceOf('\Illuminate\Database\Eloquent\Relations\HasMany', $user->ownedBoards());
@@ -73,9 +73,13 @@ class UserTest extends TestCase
     public function testUserHasManyAssignedTasks()
     {
         $nb         = 3; 
-        $user       = User::factory()
-                        ->hasAssignedTasks($nb)
-                        ->create();
+        $user = User::factory()->create(); 
+        $board = Board::factory()->hasTasks($nb)->create(['user_id' => $user->id]);
+        
+
+        foreach($board->tasks as $task) {
+            TaskUser::factory()->create(['user_id' => $user->id, 'task_id' => $task->id]);
+        }
 
         // test 1: Le nombre de tâches assignées à l'utilisateurs est bien égal à $nb (le jeu de données fourni dans la fonction).
         $this->assertEquals($nb, $user->assignedTasks->count());

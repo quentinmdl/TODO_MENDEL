@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BoardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,3 +21,15 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+
+Route::get('boards', [BoardController::class, 'index'])->middleware('auth')->name('boards.index');
+Route::get('boards/create', [BoardController::class, 'create'])->middleware('auth')->name('boards.create');
+Route::post('boards', [BoardController::class, 'store'])->middleware('auth')->name('boards.store');
+Route::get('boards/{board}', [BoardController::class, 'show'])->middleware('auth')->name('boards.show');
+Route::get('boards/{board}/edit', [BoardController::class, 'edit'])->middleware('auth')->name('boards.edit');
+Route::put('boards/{board}', [BoardController::class, 'update'])->middleware('auth')->name('boards.update');
+Route::delete('boards/{board}', [BoardController::class, 'destroy'])->middleware('auth')->name('boards.destroy');
+
+
+// Route::resource('boards', BoardController::class);
