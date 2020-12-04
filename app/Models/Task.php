@@ -15,6 +15,13 @@ class Task extends Model
 {
     use HasFactory;
 
+
+    /**
+     * Tableau qui nous permet de préciser les champs que l'on peut assigner depuis un tableau de données
+     */
+    protected $fillable = ['title', 'description', 'due_date', 'state', 'category_id', 'board_id'];
+
+
     /**
      * Renvoie la catégorie de la tâche
      *
