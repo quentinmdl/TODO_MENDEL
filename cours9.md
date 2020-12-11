@@ -4,101 +4,99 @@ Finir les contrôleurs TaskController, BoardController, et faire TaskUSer.
 
 Il faudrait pouvoir faire en sorte que seul le propriétaire d'un board puisse ajouter/supprimer des utilisateurs participant au board : https://laravel.com/docs/8.x/authorization (vous serez surtout attentif aux policies)
 
-On fera aussi en sorte de finir nos todo : à savoir quand on ajoute une tache à un board, il faut vérifier que le board auquel appartient la tâche appartient aussi à l'utilisateur qui fait cet ajout : fonction `store` et `storeFromBoard`.
+On fera aussi en sorte de finir nos todo : à savoir quand on ajoute une tache à un board, il faut vérifier que le board auquel appartient la tâche appartient aussi à l'utilisateur qui fait cet ajout : fonction store et storeFromBoard.
+
 
 ## TaskController
 
+On considère qu'une tâche est toujours associée à un board. Ainsi, il serait d'obtenir le board depuis la route (l'url). 
 
-On constate que les tâches sont toujours associées à un board. Ainsi, il serait préférable d'obtenir le board depuis la route (dans l'url). 
+On définie la route suivante : `Route::resource("/boards/{board}/tasks", TaskController::class)->middleware('auth');` sans oublié le middleware `auth`.
 
-On peut donc définir la route suivante : 
-`Route::resource("/boards/{board}/tasks", TaskController::class);`
+Nous devrons rajouter un paramètre `Board $board` pour chacune des fonctions du contrôleur. Les routes et fonctions `createFromBoard` et `storeFromBoard` ne seront plus nécessaires. 
 
-Nous devrons rajouter un paramètre `Board $board` à chacune des fonctions du contrôleur. 
-Les routes et fonctions createFromBoard ne seront plus nécessaires. 
+On a fait la vue `tasks.index` qui permet l'affichage de toutes les tâches d'une board. 
 
+On a fini le TaskController.
 
-On créé la vue `boards.task.index`, qui renvoie affiche toutes les tâches de la board
+## Les règles de gestions. 
 
-On a fini le contrôleur pour les tâches `TaskController`, ainsi que les vues associées. 
-
-On va s'occuper des mettre en oeuvre les règles suivantes: 
- 1. Pour les boards     
-    - un utilisateur ne peut voir que les boards auxquelles il participe. 
-    - Seul le propriétaire d'un board peut le modifier ou le supprimer
-    - tous les utilisateurs connecté peuvent en créer un 
- 2. Pour les tâches d'un board
-    - tous les participants du board peuvent en créer une 
-    - tous les participants du board peuvent s'assigner une tâche
+On va gérer les règles suivantes : 
+ 1. Pour les boards : 
+    - un utilisateur ne peut voir que les boards auxquels il appartient
+    - seul le propriétaire d'un board peut le supprimer ou le modifier
+    - tous les utilisateurs connectés peuvent créer un board. 
+ 2. Pour les taĉhes d'un board
+    - tous les participants du board peuvent en créer une
+    - tous les participants du board peuvent assigner une tâche 
     
-    - seul les utilisateurs assignés peuvent modifier le status ??? À voir comment faire. 
+Pour pouvoir ces règles, nous allons utiliser les policies, qui consiste en un mécanisme fournie par Laravel, permettant de spécifier les différentes actions qu'un utilisateur peut effectuer sur un modèle : https://laravel.com/docs/8.x/authorization#creating-policies
+La commande pour créer notre boardPolicy : 
+```sh
+php artisan make:policy BoardPolicy --model=board
+```
 
+Un fichier de policy contient plusieurs fonctions : 
 
-Pour cela, nous allons utiliser les policies. 
-pour créer une policy pour le modèle board : 
-`php artisan make:policy BoardPolicy --model=Board`
+ - `viewAny` à utiliser dans la fonction `index` du contrôleur
+ - `viewy` à utiliser dans la fonction `show` du contrôleur
+ - `create` à utiliser dans les fonctions `create` et `store` du contrôleur
+ - `update` à utiliser dans les fonctions `edit` et `update` du contrôleur
+ - `delete` à utiliser dans la fonction `destroy` du contrôleur
 
-Un fichier de policy contient des fonctions : 
-    - `viewAny` à utiliser dans la fonction `index` du contrôleur
-    - `view` à utiliser dans la fonction `show` du contrôleur
-    - `create` à utiliser dans la fonction `create` et `store` du contrôleur
-    - `update` à utiliser dans la fonction `edit` et `update` du contrôleur
-    - `delete` à utiliser dans la fonction `delete` du contrôleur
-    
+Pour utiliser les policies, on a trois possibilités : 
 
-Pour les utiliser, on a 3 possibilités
- - en utilisant une fonction `authorize` du contrôleur (dans un contrôleur) : 
+ - en utilisant une fonction `authorize` du contrôleur (dans un contrôleur) :
    ```php
-   public function create(Request $request)
-    {
-        $this->authorize('create', Board::class);
+   public function create(Request $request) 
+   {
+      $this->authorize('create', Board::class);
 
-        // The current user can create Board ...
-    } 
-    ```
- - En utilisant le modèle User dans un contrôleur ou une vue : 
-    ```php 
-    public function store(Request $request)
-    {
-        if ($request->user()->cannot('create', Board::class)) { // Il existe les méthode can et cannot
-            abort(403);
-        }
+      // Si on arrive ici on peut créer le board
+   }
+   ```
 
-        // Create the post...
-    }
-    ```
+- en utilisant le modèle `user`  que l'on récupère depuis la requête (dans un contrôleur) :
+   ```php
+   public function store(Request $request) 
+   {
+      if($request->user->cannot('create', Board::class)) { // Il existe can et cannot
+         abort(403);    // Renvoi un code de réponse HTTP 403, qui signifie non autorisé
+      }
+
+      // Si on arrive ici, on peut créer le board
+
+   }
+   ```
+
 - Via les middleware `can` et `cannot` (dans les routes et les vues)
-    ```php
-        Route::put('boards/{board}', [BoardController::class, 'update'])->middleware('can:update,board');
-    ```
-    cf : https://laravel.com/docs/8.x/authorization#via-middleware
+   ```php
+      Route::put('boards/{board}', [BoardController::class, 'update'])->middleware('can:update,board');
+   ```
+   cf : https://laravel.com/docs/8.x/authorization#via-middleware
 
+On peut aussi utiliser les policies dans les templates blade : en utilisant les directive `@can('update', $board) .... @endcan` : 
 
+```html
+      @can('update', $board)
+      <a href="{{route('boards.edit', $board)}}">edit</a></p></p>
+      @endcan 
+```
 
-On peut aussi utiliser les policies dans les templates blade : en utilisant des directive `@can('update', $board) ... @endcan` : 
-    ```html
-        @can('view', $board)
-        <a href="{{route('boards.show', $board)}}">Voir</a>
-        @endcan
-        @can('update', $board)
-        <a href="{{route('boards.edit', $board)}}">Edit</a>
-        @endcan
-    ```
-    cf https://laravel.com/docs/8.x/authorization#via-blade-templates
+cf https://laravel.com/docs/8.x/authorization#via-blade-templates
 
+on peut se contenter d'initialiser les instructions dans le constructeur de notre contrôleur, si celui-ci soit un `resource controler`, lié à un modèle (Board par exemple) : 
 
-On peut se contenter d'initialiser les autorisations dans el constructeur de notre contrôleur si celui-ci est bien un `resource controller` lié à un modèle :
-    ```php
-        public function __construct()
-        {
-            /* 
-                Cette fonction gère directement les autorisations pour chacune des méthodes du contrôleur 
-                en fonction des méthodes de BoardPolicy(viewAny, view, update, ....)
-                https://laravel.com/docs/8.x/authorization#authorizing-resource-controllers
-                
-            */
-            $this->authorizeResource(Board::class, 'board'); 
-        }
-    ```
-    
-    cf https://laravel.com/docs/8.x/authorization#authorizing-resource-controllers
+```php
+    public function __construct()
+    {
+        /*
+         * Cette fonction gre directement les autorisations pour chacune des méthodes du contrôleur 
+         * en fonction des méthode du BoardPolicy (viewAny, view, update, create, ...)
+         * 
+         *  https://laravel.com/docs/8.x/authorization#authorizing-resource-controllers
+         */
+        $this->authorizeResource(Board::class, 'board');
+    }
+```
+
