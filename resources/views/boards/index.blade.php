@@ -8,13 +8,19 @@
     <div>Les boards de l'utilisateur</div>
     @foreach ($user->boards as $board)
         <p>Le board {{ $board->title }} : 
+                @can('view', $board)
                 <a href="{{route('boards.show', $board)}}">Voir</a>
+                @endcan
+                @can('update', $board)
                 <a href="{{route('boards.edit', $board)}}">Edit</a>
+                @endcan
+                @can('delete', $board)
                 <form method='POST' action="{{route('boards.destroy', $board)}}">
                     @csrf
                     @method('DELETE')
                     <button type="submit">Delete</button>
                 </form>
+                @endcan
             </p>
     @endforeach
 @endsection

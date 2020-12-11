@@ -1,10 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
 
 use App\Models\{Board, User};
+use App\Policies\BoardPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class BoardController extends Controller
 {
@@ -34,21 +38,11 @@ class BoardController extends Controller
     public function index()
     {
         // Renvoi une vue à laquelle on transmet les boards de l'utilisateurs (ceux auxquels il participe)
-        $user = Auth::user();
-        return view('boards.index', ['user' => $user]);
+        //$user = Auth::user();
+        return Board::all();
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-        return view('boards.create');
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -71,7 +65,7 @@ class BoardController extends Controller
         $board->user_id = Auth::user()->id; 
 
         $board->save(); 
-        return redirect('/boards');
+        return $board->toJson();
         
     }
 
@@ -91,22 +85,10 @@ class BoardController extends Controller
         // on récupère ici tous les utilisateurs qui ne sont pas dans la board. 
         // Notez le get, qui permet d'obtenir la collection (si on ne le met pas, on obtient un query builder mais la requête n'est pas executée)
         $usersNotInBoard  = User::whereNotIn('id', $boardUsersIds)->get();
-        return view('boards.show', ['board' => $board, 'users' => $usersNotInBoard]);
+        return $board->toJson(); 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Board  $board
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Board $board)
-    {
-        //
-        //$this->authorize('update', $board);
-        return view('boards.edit', ['board' => $board]);
-    }
-
+    
     /**
      * Update the specified resource in storage.
      *
@@ -127,7 +109,7 @@ class BoardController extends Controller
         $board->description = $validatedData['description']; 
         $board->update(); 
 
-        return redirect('/boards');
+        return $board->toJson();
     }
 
     /**
@@ -139,7 +121,8 @@ class BoardController extends Controller
     public function destroy(Board $board)
     {
         //
+        $b = $board;
         $board->delete();
-        return redirect('/boards');
+        return $board->toJson();
     }
 }

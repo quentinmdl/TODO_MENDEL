@@ -26,5 +26,5 @@
     </form>
 
     <br>
-    <a href="{{route('boards.tasks.create', $board)}}">Ajouter une tâche</a>
+    <a href="{{route('tasks.create', $board)}}">Ajouter une tâche</a>
 @endsection
