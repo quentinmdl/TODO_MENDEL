@@ -19,7 +19,6 @@ class BoardUserController extends Controller
         $validatedData = $request->validate([
             'user_id' => 'required|integer|exists:users,id',
         ]);
-        // TODO il faudrait vérifier qu'il n'existe pas déjà dans le board
         $boardUser = new Boarduser(); 
         $boardUser->user_id = $validatedData['user_id']; 
         $boardUser->board_id = $board->id; 

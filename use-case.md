@@ -23,15 +23,15 @@
   
 ## En tant que participant d'un board (invité par son propriétaire), je peux
     - Créer une tâche 
-    - M'assinger une tâche
-    - assigner la tâches à des utilisateur du board
+    - M'assigner une tâche
+    - assigner la tâche à des utilisateur du board
     - éditer tous les champs d'une tâches (sauf le status)
     - transferer la propriété et j'en serais donc seulement participant
     - commenter une tâche
     - mettre des pièces jointes dans une tâche
   
 ## En tant qu'assigné à une tâche, je peux : 
-    - changer son status
+    - changer son statut
     
 ## En tant que propriétaire d'un commentaire : 
     - éditer le commentaire

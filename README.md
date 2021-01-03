@@ -69,3 +69,39 @@ Un blog très pertinent  : http://laravel.sillo.org/
 ## Le mcd de l'application
 
 [mcd]: https://raw.githubusercontent.com/NF-yac/todo-b2-20-21/master/database/mcd/todo.svg "MCD de l'application"
+
+
+
+### TP , Evaluation Finale , MENDEL Quentin B2A.
+
+
+Réalisé : 
+
+On crée un controller , 'TaskUserController'. avec un show et destroy.
+
+On affiche les tâches appartenant à la board dans le board.show.
+
+on ajoute un boutton 'créer un board' dans board.index.
+
+On ajoute les authorisations dans le task controller.
+
+On crée une policy afin de gérer la gestion des tâches, avec la commande suivante : php artisan make:policy TaskPolicy -m Task. Que l'on compléte.
+
+On modifie la vue task.edit en fonction de la  policy.
+
+
+On passe maintenant à la gestion des commentiares, pour cela nous commençons par créer une controller, 'CommentController'. que l'on complète.
+
+Puis crée un 'CommentPolicy' pour gérer les droits sur les commentaires avec les vues.
+
+
+Testé : 
+
+Ajout de nouvelles routes, en fonction des méthodes de 'TaskUserCnntroller' + modification des la vue task.show pour assigner des utilisateurs aux tâches et les affichés.
+
+
+
+Pas réalisé : 
+
+La gestion ds commentaires, selon moi , on aurait dû , créer un controller 'comment', sa policy, sa route , puis un form en POST, avec sa route et un textarea.
+

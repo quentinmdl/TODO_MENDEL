@@ -2,12 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Task, Category, Board};
+use App\Models\{Task, Category, Board,User};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class TaskController extends Controller
 {
+
+    use HandlesAuthorization;
+
+    /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        /* 
+            Cette fonction gère directement les autorisations pour chacune des méthodes du contrôleur 
+            en fonction des méthodes de BoardPolicy(viewAny, view, update, ....)
+            https://laravel.com/docs/8.x/authorization#authorizing-resource-controllers
+        */
+        $this->authorizeResource(Task::class, 'task'); 
+    }
+
     /**
      * Display a listing of the resource.
      *

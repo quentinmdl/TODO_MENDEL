@@ -26,5 +26,20 @@
     </form>
 
     <br>
+
+    <h3>Voici les différentes tâches de la board</h3>
+
+    @foreach ($board->tasks as $task)
+        <p>La task {{ $task->title }}, créateur:
+            <a href="{{route('tasks.show', [$board,$task])}}">Voir</a>
+            <a href="{{route('tasks.edit', [$board,$task])}}">Edit</a>
+        <form method='POST' action="{{route('tasks.destroy', ["board" => $board, "task" => $task])}}">
+            @csrf
+            @method('DELETE')
+            <button type="submit">Delete</button>
+        </form>
+        </p>
+    @endforeach
+
     <a href="{{route('tasks.create', $board)}}">Ajouter une tâche</a>
 @endsection

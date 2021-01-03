@@ -23,4 +23,9 @@
                 @endcan
             </p>
     @endforeach
+
+    <form method='GET' action="{{route('boards.create', $board)}}">
+        @csrf
+        <button type="submit">Créer un board</button>
+    </form>
 @endsection

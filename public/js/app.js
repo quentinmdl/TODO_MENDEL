@@ -21304,8 +21304,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/niko/Documents/cours/ynov/2020-2021/framework-php/laravel-pojects-nosync/todo-b2-students-nosync/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /home/niko/Documents/cours/ynov/2020-2021/framework-php/laravel-pojects-nosync/todo-b2-students-nosync/resources/css/app.css */"./resources/css/app.css");
+__webpack_require__(/*! /Users/quentinmdl/OneDrive - Ynov/Cours/Ynov B2 Info/1èr Semestre/Framework_PHP/Laravel_Project/TODO_MENDEL/todo-b2-20-21/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/quentinmdl/OneDrive - Ynov/Cours/Ynov B2 Info/1èr Semestre/Framework_PHP/Laravel_Project/TODO_MENDEL/todo-b2-20-21/resources/css/app.css */"./resources/css/app.css");
 
 
 /***/ })

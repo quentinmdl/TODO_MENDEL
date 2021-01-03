@@ -42,3 +42,6 @@ Route::resource("/boards/{board}/tasks", TaskController::class)->middleware('aut
 
 Route::post('boards/{board}/users', [BoardUserController::class, 'store'])->middleware('auth')->name('boards.users.store');
 Route::delete('boarduser/{BoardUser}', [BoardUserController::class, 'destroy'])->middleware('auth')->name('boards.users.destroy');
+
+//Route::post('boards/{board}/tasks/{task}/show', [TaskUserController::class, 'store'])->middleware('auth')->name('boards.tasks.users.store');
+//Route::delete('taskuser/{TaskUser}', [TaskUserController::class, 'destroy'])->middleware('auth')->name('tasks.users.destroy');

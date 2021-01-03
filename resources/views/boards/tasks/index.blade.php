@@ -7,7 +7,9 @@
     @foreach ($board->tasks as $task)
         <p>La task {{ $task->title }} :
             <a href="{{route('tasks.show', [$board,$task])}}">Voir</a>
+            @can ('UPDATE',$task)
             <a href="{{route('tasks.edit', [$board,$task])}}">Edit</a>
+            @endcan
         <form method='POST' action="{{route('tasks.destroy', ["board" => $board, "task" => $task])}}">
             @csrf
             @method('DELETE')
